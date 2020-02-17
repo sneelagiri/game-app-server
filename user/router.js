@@ -18,10 +18,10 @@ router.post("/user", async (request, response) => {
     });
     response.status(201).send("User created");
   } catch (error) {
-    console.log(error.name);
+    console.log("what does the error look like: ", error.errors[0].message);
     switch (error.name) {
       case "SequelizeUniqueConstraintError":
-        return response.status(400).send({ message: "Email not unique" });
+        return response.status(400).send({ message: error.errors[0].message });
       default:
         return response.status(400).send("Baaaddd request");
     }
