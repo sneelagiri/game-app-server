@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const lobbyFactory = require("./lobby/router");
+const lobbyRouter = require("./lobby/router");
 const userRouter = require("./user/router");
 const app = express();
 const Sse = require("json-sse");
@@ -13,29 +13,30 @@ app.use(corsMiddleware);
 const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
-const stream = new Sse();
+// const stream = new Sse();
 
 // get on the stream
-app.get("/stream", async (request, response, next) => {
-  try {
-    const lobbies = await Lobby.findAll({ include: [User] });
+// app.get("/stream", async (request, response, next) => {
+//   try {
+//     const lobbies = await Lobby.findAll({ include: [User] });
 
-    const action = {
-      type: "ALL_LOBBIES",
-      payload: lobbies
-    };
+//     const action = {
+//       type: "ALL_LOBBIES",
+//       payload: lobbies
+//     };
 
-    const json = JSON.stringify(action);
+//     const json = JSON.stringify(action);
 
-    stream.updateInit(json);
-    stream.init(request, response);
-  } catch (error) {
-    next(error);
-  }
-});
+//     stream.updateInit(json);
+//     stream.init(request, response);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 app.use(userRouter);
-const lobbyRouter = lobbyFactory(stream);
+
+// const lobbyRouter = lobbyFactory(stream);
 app.use(lobbyRouter);
 
 app.listen(port, () => {
