@@ -3,6 +3,7 @@ const User = require("./model");
 const bcrypt = require("bcrypt");
 const { toJWT } = require("../auth/jwt");
 const router = new Router();
+
 router.post("/user", async (request, response) => {
   if (!request.body.email || !request.body.password) {
     return response
