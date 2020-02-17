@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const User = require("./user/model");
 const userFactory = require("./user/router");
 const app = express();
 
@@ -12,6 +11,8 @@ app.use(corsMiddleware);
 const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
-const userRouter = app.listen(port, () => {
+app.use(userFactory);
+
+app.listen(port, () => {
   console.log(`Listening on: ${port}`);
 });
