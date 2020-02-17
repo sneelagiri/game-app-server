@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const userFactory = require("./user/router");
 const app = express();
-
+const db = require("./user/model");
 const port = process.env.PORT || 4000;
 
 const corsMiddleware = cors();
