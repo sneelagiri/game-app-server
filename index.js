@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const lobbyFactory = require("./lobby/router");
+const userRouter = require("./user/router");
 const app = express();
 const Sse = require("json-sse");
 const Lobby = require("./lobby/model");
@@ -33,8 +34,9 @@ app.get("/stream", async (request, response, next) => {
   }
 });
 
-const userRouter = lobbyFactory(stream);
 app.use(userRouter);
+const lobbyRouter = lobbyFactory(stream);
+app.use(lobbyRouter);
 
 app.listen(port, () => {
   console.log(`Listening on: ${port}`);
