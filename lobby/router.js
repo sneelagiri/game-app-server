@@ -2,6 +2,7 @@ const express = require("express");
 const Lobby = require("./model");
 const User = require("../user/model");
 const auth = require("../auth/middleware");
+
 function factory(stream) {
   const { Router } = express;
 

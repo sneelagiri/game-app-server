@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const userRouter = require("./user/router");
+const userFactory = require("./user/router");
 const app = express();
 const Sse = require("json-sse");
 const User = require("./user/model");
@@ -38,6 +38,7 @@ app.get("/stream", async (request, response, next) => {
 
 const lobbyRouter = lobbyFactory(stream);
 app.use(lobbyRouter);
+const userRouter = userFactory(stream);
 app.use(userRouter);
 
 app.use(authRouter);
