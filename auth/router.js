@@ -49,6 +49,7 @@ router.post("/login", (req, res) => {
   }
 });
 
+// to test: http :4000/secret-endpoint "Authorization":"Bearer <jwt-token>"
 router.get("/secret-endpoint", auth, (req, res) => {
   res.send({
     message: `Thanks for visiting the secret endpoint ${req.user.email}.`

@@ -3,6 +3,7 @@ const cors = require("cors");
 const userRouter = require("./user/router");
 const app = express();
 const Sse = require("json-sse");
+const User = require("./user/model");
 const Lobby = require("./lobby/model");
 const lobbyFactory = require("./lobby/router");
 const authRouter = require("./auth/router");

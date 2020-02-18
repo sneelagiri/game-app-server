@@ -3,7 +3,11 @@ const Sequelize = require("sequelize");
 const User = require("../user/model");
 
 const Lobby = db.define("lobby", {
-  name: Sequelize.STRING
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true
+  }
 });
 
 User.belongsTo(Lobby);

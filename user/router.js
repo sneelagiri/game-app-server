@@ -2,6 +2,7 @@ const { Router } = require("express");
 const User = require("./model");
 const bcrypt = require("bcrypt");
 const { toJWT } = require("../auth/jwt");
+const auth = require("../auth/middleware");
 const router = new Router();
 
 router.post("/user", async (request, response) => {
@@ -28,4 +29,17 @@ router.post("/user", async (request, response) => {
   }
 });
 
+router.put("/user/:id", auth, async (request, response) => {
+  try {
+    const match = await User.findByPk(request.params.id);
+    if (match) {
+      match.update(request.body);
+      response.status(201).send(match);
+    } else {
+      response.status(404).end();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
 module.exports = router;
