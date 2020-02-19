@@ -33,11 +33,14 @@ function factory(stream) {
     }
   });
 
+  //request from the fontend
+  //respone from backend to fontend
   router.put("/user/:id", auth, async (request, response) => {
     try {
       const match = await User.findByPk(request.params.id);
 
       if (match) {
+        //req.body = lobbyId
         const finished = await match.update(request.body);
         response.status(201).send(match);
         if (finished) {
@@ -52,7 +55,7 @@ function factory(stream) {
           };
 
           const json = JSON.stringify(action);
-
+          //stream send updated data back to the fontend
           stream.send(json);
         } else {
           console.log("update operation is not finishing");

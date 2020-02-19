@@ -3,19 +3,19 @@ const sequelize = require("../db");
 
 const Question = sequelize.define("question", {
   questionSentence: {
-    type: Sequelize.text
+    type: Sequelize.STRING
   },
   answerOne: {
-    type: Sequelize.text
+    type: Sequelize.STRING
   },
   answerTwo: {
-    type: Sequelize.text
+    type: Sequelize.STRING
   },
   answerThree: {
-    type: Sequelize.text
+    type: Sequelize.STRING
   },
   answerFour: {
-    type: Sequelize.text
+    type: Sequelize.STRING
   }
 });
 
