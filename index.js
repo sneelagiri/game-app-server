@@ -1,5 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+const socketio = require("socket.io");
+const http = require("http");
+const path = require("path");
 const userFactory = require("./user/router");
 const app = express();
 const Sse = require("json-sse");
@@ -7,8 +10,12 @@ const User = require("./user/model");
 const Lobby = require("./lobby/model");
 const lobbyFactory = require("./lobby/router");
 const authRouter = require("./auth/router");
-const port = process.env.PORT || 4000;
+const { TriviaGameManager } = require("");
 
+const port = process.env.PORT || 4000;
+const server = http.createServer(app);
+const io = socketio(server);
+const games = new TriviaGameManager();
 const corsMiddleware = cors();
 app.use(corsMiddleware);
 
