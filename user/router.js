@@ -38,19 +38,25 @@ function factory(stream) {
       const match = await User.findByPk(request.params.id);
 
       if (match) {
-        match.update(request.body);
+        const finished = await match.update(request.body);
         response.status(201).send(match);
-        const lobbies = await Lobby.findAll({ include: [User] });
+        if (finished) {
+          const lobbies = await Lobby.findAll({ include: [User] });
+          const newArray = lobbies.map(lobby => {
+            return lobby.dataValues;
+          });
+          console.log("Lobbies in backend: ", newArray);
+          const action = {
+            type: "ALL_LOBBIES",
+            payload: newArray
+          };
 
-        console.log("Lobbies in backend: ", lobbies);
-        const action = {
-          type: "ALL_LOBBIES",
-          payload: lobbies
-        };
+          const json = JSON.stringify(action);
 
-        const json = JSON.stringify(action);
-
-        stream.send(json);
+          stream.send(json);
+        } else {
+          console.log("update operation is not finishing");
+        }
       } else {
         response.status(404).end();
       }
