@@ -2,7 +2,7 @@ const { Router } = require("express");
 const usersResponse = require("./model");
 const router = new Router();
 const User = require("../user/model");
-
+const axios = require("axios");
 function factory(stream) {
   router.post("/userResponse", async function(request, response, next) {
     try {
@@ -45,13 +45,14 @@ function factory(stream) {
       console.error(error);
     }
   });
-  router.get("/questions", async function(request, response, next) {
+  router.post("/questions", async function(request, response, next) {
+    console.log("AM I BEING REACHED?");
     try {
-      const response = await axios.get(
+      const fetchedQuestions = await axios.get(
         "https://opentdb.com/api.php?amount=10&type=multiple"
       );
-      // console.log("What is the response", response.data.results);
-      const questions = [...response.data.results];
+      // console.log(fetchedQuestions);
+      const questions = [...fetchedQuestions.data.results];
       const updatedQuestions = questions.map(object => {
         object.incorrect_answers.push(object.correct_answer);
         object["options"] = object["incorrect_answers"];
@@ -66,7 +67,7 @@ function factory(stream) {
       const json = JSON.stringify(action);
 
       stream.send(json);
-      response.send(json);
+      response.send(updatedQuestions);
     } catch (error) {
       throw new Error("Unable to fetch questions", error);
     }
