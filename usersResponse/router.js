@@ -24,7 +24,7 @@ function factory(stream) {
         const matchingUser = await User.findByPk(body.userId, {
           include: usersResponse
         });
-        console.log(matchingUser);
+        // console.log(matchingUser);
         if (matchingUser) {
           const updatedUser = await matchingUser.update({
             usersResponseId: ref.id
@@ -36,12 +36,39 @@ function factory(stream) {
           const json = JSON.stringify(action);
 
           stream.send(json);
+          response.send(json);
         }
       } else {
         return "Not finished";
       }
     } catch (error) {
       console.error(error);
+    }
+  });
+  router.get("/questions", async function(request, response, next) {
+    try {
+      const response = await axios.get(
+        "https://opentdb.com/api.php?amount=10&type=multiple"
+      );
+      // console.log("What is the response", response.data.results);
+      const questions = [...response.data.results];
+      const updatedQuestions = questions.map(object => {
+        object.incorrect_answers.push(object.correct_answer);
+        object["options"] = object["incorrect_answers"];
+        delete object.incorrect_answers;
+        return object;
+      });
+      // console.log("These are the updated questions", updatedQuestions);
+      const action = {
+        type: "FETCH_QUESTIONS",
+        payload: updatedQuestions
+      };
+      const json = JSON.stringify(action);
+
+      stream.send(json);
+      response.send(json);
+    } catch (error) {
+      throw new Error("Unable to fetch questions", error);
     }
   });
   return router;
