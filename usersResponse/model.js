@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../db");
+const User = require("../user/model");
 
 const UsersResponse = sequelize.define("usersResponse", {
   questionOne: {
@@ -47,7 +48,6 @@ const UsersResponse = sequelize.define("usersResponse", {
   }
 });
 
-UsersResponse.belongsTo(User);
-User.hasMany(UsersResponse);
+User.belongsTo(UsersResponse);
 
 module.exports = UsersResponse;

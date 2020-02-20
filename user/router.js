@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const { toJWT } = require("../auth/jwt");
 const auth = require("../auth/middleware");
 const router = new Router();
+const UsersResponse = require("../usersResponse/model");
 
 function factory(stream) {
   router.post("/user", async (request, response) => {
@@ -35,14 +36,14 @@ function factory(stream) {
 
   //request from the fontend
   //respone from backend to fontend
-  router.put("/user/:id", auth, async (request, response) => {
+  router.put("/user/:id", async (request, response) => {
     try {
       const match = await User.findByPk(request.params.id);
 
       if (match) {
         //req.body = lobbyId
         const finished = await match.update(request.body);
-        response.status(201).send(match);
+        response.status(201).send(finished);
         if (finished) {
           const lobbies = await Lobby.findAll({ include: [User] });
           const newArray = lobbies.map(lobby => {

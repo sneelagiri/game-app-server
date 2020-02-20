@@ -6,6 +6,7 @@ const Sse = require("json-sse");
 const User = require("./user/model");
 const Lobby = require("./lobby/model");
 const UsersResponse = require("./usersResponse/model");
+const UsersResponseFactory = require("./usersResponse/router");
 const lobbyFactory = require("./lobby/router");
 const authRouter = require("./auth/router");
 const port = process.env.PORT || 4000;
@@ -15,6 +16,7 @@ app.use(corsMiddleware);
 
 const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
+app.use(authRouter);
 
 const stream = new Sse();
 
@@ -41,9 +43,8 @@ const lobbyRouter = lobbyFactory(stream);
 app.use(lobbyRouter);
 const userRouter = userFactory(stream);
 app.use(userRouter);
-
-app.use(authRouter);
-
+const UsersResponseRouter = UsersResponseFactory(stream);
+app.use(UsersResponseRouter);
 app.listen(port, () => {
   console.log(`Listening on: ${port}`);
 });
