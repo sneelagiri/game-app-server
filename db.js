@@ -9,5 +9,5 @@ const db = new Sequelize(databaseUrl);
 db.sync({ force: false }).then(() => {
   console.log("DB connect");
 });
-
+console.log("Accessing new branches");
 module.exports = db;
