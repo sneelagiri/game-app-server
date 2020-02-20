@@ -5,6 +5,7 @@ const app = express();
 const Sse = require("json-sse");
 const User = require("./user/model");
 const Lobby = require("./lobby/model");
+const Question = require("./game /model");
 const lobbyFactory = require("./lobby/router");
 const authRouter = require("./auth/router");
 const port = process.env.PORT || 4000;
