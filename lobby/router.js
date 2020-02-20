@@ -11,8 +11,8 @@ function factory(stream) {
   router.post("/lobby", auth, async function(request, response, next) {
     try {
       const { body } = request;
-      console.log("body test:", body);
-      console.log(request.user.dataValues.id);
+      // console.log("body test:", body);
+      // console.log(request.user.dataValues.id);
       const { name } = body;
       const entity = { name };
       const ref = await Lobby.create(entity);

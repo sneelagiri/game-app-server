@@ -22,7 +22,7 @@ function factory(stream) {
       });
       response.status(201).send("User created");
     } catch (error) {
-      console.log("what does the error look like: ", error.errors[0].message);
+      // console.log("what does the error look like: ", error.errors[0].message);
       switch (error.name) {
         case "SequelizeUniqueConstraintError":
           return response
@@ -49,7 +49,7 @@ function factory(stream) {
           const newArray = lobbies.map(lobby => {
             return lobby.dataValues;
           });
-          console.log("Lobbies in backend: ", newArray);
+          // console.log("Lobbies in backend: ", newArray);
           const action = {
             type: "ALL_LOBBIES",
             payload: newArray
@@ -59,7 +59,7 @@ function factory(stream) {
           //stream send updated data back to the fontend
           stream.send(json);
         } else {
-          console.log("update operation is not finishing");
+          // console.log("update operation is not finishing");
         }
       } else {
         response.status(404).end();

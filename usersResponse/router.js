@@ -45,31 +45,42 @@ function factory(stream) {
       console.error(error);
     }
   });
+  let count = 1;
   router.post("/questions", async function(request, response, next) {
-    console.log("AM I BEING REACHED?");
     try {
-      const fetchedQuestions = await axios.get(
-        "https://opentdb.com/api.php?amount=10&type=multiple"
-      );
-      // console.log(fetchedQuestions);
-      const questions = [...fetchedQuestions.data.results];
-      const updatedQuestions = questions.map(object => {
-        object.incorrect_answers.push(object.correct_answer);
-        object["options"] = object["incorrect_answers"];
-        delete object.incorrect_answers;
-        return object;
-      });
-      // console.log("These are the updated questions", updatedQuestions);
-      const action = {
-        type: "FETCH_QUESTIONS",
-        payload: updatedQuestions
-      };
-      const json = JSON.stringify(action);
+      console.log("AM I BEING REACHED?", request.body);
+      if (count < request.body.numPlayers) {
+        count++;
+      } else if (count === response.body.numPlayers) {
+        try {
+          const fetchedQuestions = await axios.get(
+            "https://opentdb.com/api.php?amount=10&type=multiple"
+          );
+          console.log("ARE THE QUESTIONS BEING FETCHED?", fetchedQuestions);
+          const questions = [...fetchedQuestions.data.results];
+          const updatedQuestions = questions.map(object => {
+            object.incorrect_answers.push(object.correct_answer);
+            object["options"] = object["incorrect_answers"];
+            delete object.incorrect_answers;
+            return object;
+          });
+          // console.log("These are the updated questions", updatedQuestions);
+          const action = {
+            type: "FETCH_QUESTIONS",
+            payload: updatedQuestions
+          };
+          const json = JSON.stringify(action);
 
-      stream.send(json);
-      response.send(updatedQuestions);
+          stream.send(json);
+          response.send(updatedQuestions);
+        } catch (error) {
+          throw new Error("Unable to fetch questions", error);
+        }
+      } else {
+        count = 0;
+      }
     } catch (error) {
-      throw new Error("Unable to fetch questions", error);
+      throw new Error("Unable to complete operations", error);
     }
   });
   return router;
