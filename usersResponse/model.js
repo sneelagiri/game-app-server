@@ -3,45 +3,51 @@ const sequelize = require("../db");
 
 const UsersResponse = sequelize.define("usersResponse", {
   questionOne: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   questionTwo: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   questionThree: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   questionFour: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   questionFive: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   questionSix: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   questionSeven: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   questionEight: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   questionNine: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   questionTen: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
+  },
+  points: {
+    type: Sequelize.INTEGER
   }
 });
+
+UsersResponse.belongsTo(User);
+User.hasMany(UsersResponse);
 
 module.exports = UsersResponse;
