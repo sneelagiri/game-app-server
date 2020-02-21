@@ -34,6 +34,8 @@ app.get("/stream", async (request, response, next) => {
 
     stream.updateInit(json);
     stream.init(request, response);
+
+    console.log(lobbies);
   } catch (error) {
     next(error);
   }

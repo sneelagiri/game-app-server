@@ -45,80 +45,25 @@ function factory(stream) {
       console.error(error);
     }
   });
-  let count = 1;
-  router.post("/questions", async function(request, response, next) {
+  router.get("/questions", async function(request, response, next) {
     try {
-      console.log("What is the request body?", request.body);
-      if (count === request.body.numPlayers) {
-        response.send("Waiting for other players");
-        const fetchedQuestions = await axios.get(
-          "https://opentdb.com/api.php?amount=10&type=multiple"
-        );
-        // console.log("ARE THE QUESTIONS BEING FETCHED?", fetchedQuestions);
-        for (let i = 0; i < 1; i++) {
-          const questions = [...fetchedQuestions.data.results];
-          const updatedQuestions = questions.map(object => {
-            object.incorrect_answers.push(object.correct_answer);
-            object["options"] = object["incorrect_answers"];
-            delete object.incorrect_answers;
-            return object;
-          });
-          console.log(updatedQuestions);
-          // console.log("These are the updated questions", updatedQuestions);
-          const action = {
-            type: "FETCH_QUESTIONS",
-            payload: updatedQuestions
-          };
-          const json = JSON.stringify(action);
-          stream.send(json);
-        }
-      } else if (count < request.body.numPlayers) {
-        count++;
-        response.send("Waiting for other players");
-      } else {
-        count = 1;
-        console.log("count has been reset");
-        response.send("Count has been reset");
-      }
+      console.log("WE GET THIS FAR 1");
+      const fetchedQuestions = await axios.get(
+        "https://opentdb.com/api.php?amount=10&type=multiple"
+      );
+      console.log("WE GET THIS FAR 2");
+      const questions = [...fetchedQuestions.data.results];
+      const updatedQuestions = questions.map(object => {
+        object.incorrect_answers.push(object.correct_answer);
+        object["options"] = object["incorrect_answers"];
+        delete object.incorrect_answers;
+        return object;
+      });
+      console.log("THESE ARE THE FETCHED QUESTIONS", fetchedQuestions);
+      response.send(updatedQuestions);
     } catch (error) {
       console.error(error);
     }
-    // try {
-    //   console.log("AM I BEING REACHED?", request.body);
-    //   if (count < request.body.numPlayers) {
-    //     count++;
-    //     response.send("Waiting for other players");
-    //     return count;
-    //   } else if (count === response.body.numPlayers) {
-    //     const fetchedQuestions = await axios.get("https://randomuser.me/api/");
-    //     // const fetchedQuestions = await axios.get(
-    //     //   "https://opentdb.com/api.php?amount=10&type=multiple"
-    //     // );
-    //     // console.log("ARE THE QUESTIONS BEING FETCHED?", fetchedQuestions);
-    //     // const questions = [...fetchedQuestions.data.results];
-    //     // const updatedQuestions = questions.map(object => {
-    //     //   object.incorrect_answers.push(object.correct_answer);
-    //     //   object["options"] = object["incorrect_answers"];
-    //     //   delete object.incorrect_answers;
-    //     //   return object;
-    //     // });
-    //     // // console.log("These are the updated questions", updatedQuestions);
-    //     // const action = {
-    //     //   type: "FETCH_QUESTIONS",
-    //     //   payload: updatedQuestions
-    //     // };
-    //     // const json = JSON.stringify(action);
-    //     // stream.send(json);
-    //     // response.send(updatedQuestions);
-    //     // return json;
-    //   } else {
-    //     count = 0;
-    //     response.send("Count has been reset");
-    //     return count;
-    //   }
-    // } catch (error) {
-    //   throw new Error("Unable to complete operations", error);
-    // }
   });
   return router;
 }
